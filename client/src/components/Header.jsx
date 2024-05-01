@@ -9,7 +9,7 @@ export default function Header() {
         <Link to={"/"}>
           <h1 className="text-sm sm:text-2xl font-bold flex flex-wrap">
             <span className="text-white">Simulus</span>
-            <span className="text-cyan-500 hover:text-sky-700">Motors.</span>
+            <span className="text-indigo-500 hover:text-sky-700">Motors.</span>
           </h1>
         </Link>
         <form className="bg-white flex items-center  rounded-lg p-3">
