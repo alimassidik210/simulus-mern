@@ -4,12 +4,12 @@ import { Link } from "react-router-dom";
 
 export default function Header() {
   return (
-    <header className="bg-black">
+    <header className="bg-black font-mono">
       <div className="max-w-6xl mx-auto p-3 flex items-center justify-between">
         <Link to={"/"}>
-          <h1 className="text-sm sm:text-xl font-bold flex flex-wrap">
+          <h1 className="text-sm sm:text-2xl font-bold flex flex-wrap">
             <span className="text-white">Simulus</span>
-            <span className="text-white">Motors.</span>
+            <span className="text-cyan-500 hover:text-sky-700">Motors.</span>
           </h1>
         </Link>
         <form className="bg-white flex items-center  rounded-lg p-3">
