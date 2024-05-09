@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { FaMotorcycle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import Oauth from "../components/Oauth";
 
 export default function SignUp() {
   const [formData, setFormData] = useState({});
@@ -119,6 +120,7 @@ export default function SignUp() {
                 Sign up
               </button>
             </div>
+            <Oauth />
           </form>
 
           <p className="mt-10 text-center text-sm text-gray-500">
