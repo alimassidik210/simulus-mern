@@ -10,3 +10,8 @@
     font-display: swap;
   }
 } */
+@layer utilities {
+  .min-h-svh {
+    min-height: 100svh;
+  }
+}
