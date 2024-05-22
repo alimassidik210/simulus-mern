@@ -147,10 +147,21 @@ export default function Profile() {
     }
   };
 
-  const handleDeleteListing = (listingId) => {
-    setUserListings((prev) =>
-      prev.filter((listing) => listing._id !== listingId)
-    );
+  const handleDeleteListing = async (listingId) => {
+    try {
+      const res = await fetch(`/api/listing/delete/${listingId}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (data.success === false) {
+        console.log(data.message);
+      }
+      setUserListings((prev) =>
+        prev.filter((listing) => listing._id !== listingId)
+      );
+    } catch (error) {
+      console.log("error");
+    }
   };
 
   return (
@@ -267,16 +278,7 @@ export default function Profile() {
           {showListingsError && "Postingan error"}
         </p>
       </div>
-      <div
-        className="basis-2/3 p-6  bg-gradient-to-tr from-gray-500 via-gray-400 to-gray-300   "
-        // style={{
-        //   backgroundImage: "url('/src/assets/kopi.png')",
-        //   backgroundSize: "400px",
-        //   backgroundRepeat: "no-repeat",
-        //   backgroundPosition: "center center",
-        //   backgroundBlendMode: "darken",
-        // }}
-      >
+      <div className="basis-2/3 p-6  bg-gradient-to-tr from-gray-500 via-gray-400 to-gray-300">
         {userListings && userListings.length > 0 ? (
           <h1 className="mt-6 text-2xl font-semibold px-4 ">
             Daftar Listing :
@@ -300,7 +302,8 @@ export default function Profile() {
             </h1>
           </div>
         )}
-        <div className="max-w-6xl mx-auto  ">
+
+        <div className="max-w-6xl mx-auto ">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 p-3 gap-4">
             {userListings &&
               userListings.length > 0 &&
