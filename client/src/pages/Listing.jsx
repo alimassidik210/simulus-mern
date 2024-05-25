@@ -4,11 +4,11 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore from "swiper";
 import { Navigation } from "swiper/modules";
 import "swiper/css/bundle";
-import moment from "moment";
 import { formatCurrency } from "../utils/formatCurrency";
 import { useSelector } from "react-redux";
 import Slideshow from "../components/Slideshow";
-import { FaShare, FaWhatsapp } from "react-icons/fa";
+import { FaShare, FaTag, FaWhatsapp } from "react-icons/fa";
+import ListingItem from "../components/ListingItem";
 
 export default function Listing() {
   const [error, setError] = useState(false);
@@ -18,7 +18,7 @@ export default function Listing() {
   const [copied, setCopied] = useState(false);
   const { currentUser } = useSelector((state) => state.user);
 
-  console.log(currentUser);
+  // console.log(currentUser);
 
   SwiperCore.use([Navigation]);
 
@@ -28,7 +28,12 @@ export default function Listing() {
     setLoading(true);
     try {
       const fetchListing = async () => {
-        const res = await fetch(`/api/listing/get/${params.listingId}`);
+        const res = await fetch(`/api/listing/get/${params.listingId}`, {
+          method: "get",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
         const data = await res.json();
         if (data.success == false) {
           setError(true);
@@ -74,70 +79,64 @@ export default function Listing() {
       )}
       {listing && !loading && !error && (
         <div className="grid grid-cols-1 sm:grid-cols-2 items-center  gap-2 p-5">
-          <div className="bg-indigo-200 flex items-center  sm:mt-4 sm:mb-6 p-1 rounded-lg">
+          <div className="bg-white w-full overflow-hidden  rounded-lg shadow-md hover:shadow-lg">
             <Swiper navigation>
               {listing.imagesUrl.map((url) => (
                 <SwiperSlide key={url}>
-                  <div
-                    className="w-full h-[490px]  bg-gray-500 p-3"
-                    style={{
-                      background: `url(${url}) center no-repeat`,
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
-                    }}
-                  >
-                    <div class="absolute inset-0  bg-black opacity-20"></div>
-                    <div class="relative flex font-semibold  gap-2 z-10">
-                      <h1 class="text-white text-xl">Harga</h1>
-                      <p class="text-white text-xl">
-                        {formatCurrency(listing.price)}
-                      </p>
-                    </div>
-                  </div>
+                  <img
+                    src={url}
+                    alt="photo listing"
+                    className="h-[320px] sm:h-[500px] w-full object-cover hover:scale-105  duration-300"
+                  />
+                  <p class="text-gray-700 text-xl absolute bottom-3 left-3 p-2 rounded-md bg-gray-300 flex items-center gap-2 hover:scale-105 duration-300 cursor-pointer">
+                    <FaTag className="text-green-700" />
+                    {formatCurrency(listing.price)}
+                  </p>
                 </SwiperSlide>
               ))}
             </Swiper>
           </div>
           <div className="mt-4 max-w-4xl  relative ">
-            <div className="bg-gray-100 p-2 rounded-lg">
-              <h1 className="px-3 text-xl   text-indigo-900 ">
-                <span className="mr-2  font-semibold">
-                  {moment(listing.yearPublish).format("yyyy")}
-                </span>
-                <span>{listing.name}</span>
-              </h1>
+            <div className="bg-gray-100 p-3 text-xl font-semibold rounded-lg flex justify-between truncate">
+              <p className="ml-5">{listing.name}</p>
+              <p className="mr-5">{listing.address}</p>
             </div>
 
             <Slideshow listing={listing} />
 
             <div className=" p-2 flex gap-4">
-              <div className="bg-gradient-to-r from-gray-300 via-gray-100 to-gray-300 basis-1/2 sm:basis-1/4 rounded-lg shadotw-md p-4 overflow-hidden ">
+              <div className="bg-gradient-to-r from-gray-300 via-gray-100 to-gray-300 basis-1/2  rounded-lg shadotw-md p-4 overflow-hidden ">
                 <div className="flex justify-center">
                   <img
-                    src={currentUser.avatar}
+                    src={listing.userRef.avatar}
                     alt="poto penjual"
                     className="rounded-full w-20 h-20 border-2 border-indigo-700 shadow-lg "
                   />
                 </div>
-                <div className="text-sm mt-2 flex flex-col ">
-                  <p>Nama : {currentUser.username}</p>
-                  <p>Email : {currentUser.email}</p>
-                  <p>Alamat : {listing.address}</p>
+                <div className="text-sm mt-4  gap-2 flex flex-col ">
+                  <p>Nama Penjual :</p>
+                  <b>
+                    <p className="capitalize">{listing.userRef.username}</p>
+                  </b>
+                  <p>Email Penjual :</p>
+                  <b>
+                    <p className="truncate">{listing.userRef.email}</p>
+                  </b>
                 </div>
               </div>
-              <div className="bg-gradient-to-r from-gray-300 via-gray-100 to-gray-300 basis-1/2 sm:basis-3/4 rounded-lg w-full p-3">
-                <h1>
-                  Deskripsi :{" "}
-                  <span className="font-semibold">{listing.name}</span>
-                </h1>
-                <p> {listing.description}</p>
+              <div className="bg-gradient-to-r from-gray-300 via-gray-100 to-gray-300 basis-1/2  rounded-lg w-full p-3 truncate">
+                <p className="truncate mb-2">
+                  <span className="font-bold">Deskripsi : </span>
+                  <span>{listing.name}</span>
+                </p>
+                <p className="whitespace-pre-line"> {listing.description}</p>
               </div>
             </div>
             <div className="p-2 flex gap-2 mb-5 mx-auto">
               <button
                 onClick={() =>
                   window.open(
-                    `https://wa.me/${currentUser.whatsup}?text=assalamualaikum ${currentUser.username} saya ingin menanyakan terkait ${listing.name}`,
+                    `https://wa.me/${listing.userRef.whatsup}?text=assalamualaikum ${listing.userRef.username} saya ingin menanyakan terkait ${listing.name}`,
                     "_blank",
                     "noopener noreferrer"
                   )
@@ -177,40 +176,11 @@ export default function Listing() {
         <h1 className="text-2xl ml-3 font-semibold my-3 text-indigo-900">
           Lihat Kendaraan Lainnya
         </h1>
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7  gap-4">
+        <div className="flex flex-wrap gap-4 ">
           {listings &&
             listings.length > 0 &&
-            listings.map((item, index) => (
-              <div
-                key={index}
-                className="bg-white rounded-lg shadow-md p-4 overflow-hidden"
-              >
-                <div className="flex items-center justify-center">
-                  <Link to={`/listing/${item._id}`}>
-                    <img
-                      src={item.imagesUrl[0]}
-                      alt="listing photo"
-                      className="w-32 h-32 "
-                    />
-                  </Link>
-                </div>
-                <div className="mt-2 flex flex-col gap-2 ">
-                  <Link to={`/listing/${item._id}`}>
-                    <p className="text-indigo-700 flex-1 truncate hover:underline font-semibold">
-                      {item.name}
-                    </p>
-                  </Link>
-                  <p>{formatCurrency(item.price)}</p>
-                </div>
-                <div className="mt-2 flex justify-between  font-semibold items-center">
-                  <p className="text-xs">
-                    Diposting Tanggal : <br />
-                    <span className="text-green-700 text-md text-center">
-                      {moment(item.createdAt).format("DD-MM-YYYY")}
-                    </span>
-                  </p>
-                </div>
-              </div>
+            listings.map((listing, index) => (
+              <ListingItem listing={listing} key={index} />
             ))}
         </div>
       </div>

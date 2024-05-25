@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const listingSchema = new mongoose.Schema(
   {
@@ -19,11 +19,11 @@ const listingSchema = new mongoose.Schema(
       required: true,
     },
     yearPublish: {
-      type: Date,
+      type: Number,
       required: true,
     },
     tanggalPajak: {
-      type: Date,
+      type: Number,
       required: true,
     },
     stnk: {
@@ -47,7 +47,8 @@ const listingSchema = new mongoose.Schema(
       required: true,
     },
     userRef: {
-      type: String,
+      type: Schema.Types.ObjectId,
+      ref: "User",
       required: true,
     },
   },

@@ -9,7 +9,6 @@ import {
 import { GiHelmet } from "react-icons/gi";
 import { Slide } from "react-slideshow-image";
 import "react-slideshow-image/dist/styles.css";
-import moment from "moment";
 
 const Slideshow = ({ listing }) => {
   const slideElements = [
@@ -22,9 +21,7 @@ const Slideshow = ({ listing }) => {
           <h3 className="text-sm font-semibold text-gray-800 mt-3">
             Tahun Kendaraan
           </h3>
-          <p className=" text-gray-600">
-            {moment(listing.yearPublish).format("YYYY")}
-          </p>
+          <p className=" text-gray-600">{listing.yearPublish}</p>
         </div>
       </div>
       <div className="w-full bg-gray-200 rounded-lg shadow-md overflow-hidden">
@@ -35,9 +32,7 @@ const Slideshow = ({ listing }) => {
           <h3 className="text-sm font-semibold text-gray-800 mt-3">
             Pajak Kendaraan
           </h3>
-          <p className=" text-gray-600">
-            {moment(listing.tanggalPajak).format("DD-MM-YYYY")}
-          </p>
+          <p className=" text-gray-600">{listing.tanggalPajak}</p>
         </div>
       </div>
     </div>,

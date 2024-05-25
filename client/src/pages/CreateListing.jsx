@@ -125,7 +125,10 @@ export default function CreateListing() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ ...formData, userRef: currentUser._id }),
+        body: JSON.stringify({
+          ...formData,
+          userRef: currentUser._id,
+        }),
       });
       const data = await res.json();
       if (data.success == false) {
@@ -217,11 +220,14 @@ export default function CreateListing() {
               Pajak Kendaraan
             </span>
             <input
-              type="date"
+              type="number"
               id="tanggalPajak"
               className="border p-3 rounded-lg flex-1"
+              min={"2019"}
+              max={"2024"}
               value={formData.tanggalPajak}
               onChange={handleChange}
+              placeholder="Sebutkan Tahun Saja : 2022"
             />
           </div>
           <div className="flex items-center flex-wrap gap-4">
@@ -229,11 +235,14 @@ export default function CreateListing() {
               Tahun Kendaraan
             </p>
             <input
-              type="date"
+              type="number"
               id="yearPublish"
+              min={"2000"}
+              max={"2024"}
               className="p-3 rounded-lg border flex-1"
               value={formData.yearPublish}
               onChange={handleChange}
+              placeholder="Sebutkan Tahun Saja : 2022"
             />
           </div>
           <div className="flex items-center flex-wrap gap-4">
